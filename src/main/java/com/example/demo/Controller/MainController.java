@@ -111,6 +111,14 @@ public class MainController {
      }
 
 
+     @RequestMapping("/about")
+     public String aboutActor(Model model)
+     {
+         model.addAttribute("movie", new Movie());
+         return "about";
+     }
+
+
 
     @GetMapping("/addmoviestoactor/{id}")
     public String addMovie(@PathVariable("id") long actorID, Model model) {
