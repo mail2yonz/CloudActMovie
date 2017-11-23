@@ -95,6 +95,22 @@ public class MainController {
         return "movieaddactor";
     }
 
+     @PostMapping("/addactorstomovie/{id}")
+     public String addActorProccess(@RequestParam("movies") String movieID,
+                                    @PathVariable("actid") long actorID,@ModelAttribute("anActor") Actor a,Model model)
+     {
+         Actor act = actorRepository.findOne(new Long(actorID));
+         act.addMovie(movieRepository.findOne(new Long(movieID)));
+
+         actorRepository.save(act);
+
+         model.addAttribute("actorList",actorRepository.findAll());
+         model.addAttribute("movieList",movieRepository.findAll());
+
+         return "redirect:/";
+     }
+
+
 
     @GetMapping("/addmoviestoactor/{id}")
     public String addMovie(@PathVariable("id") long actorID, Model model) {
@@ -105,7 +121,8 @@ public class MainController {
 
 
     @PostMapping("/addmoviestoactor/{movid}")
-    public String addMoviesToActor(@RequestParam("actors") String actorID, @PathVariable("movid") long movieID, @ModelAttribute("anActor") Actor a, Model model) {
+    public String addMoviesToActor(@RequestParam("actors") String actorID, @PathVariable("movid") long movieID,
+                                   @ModelAttribute("anActor") Actor a, Model model) {
         Movie m = movieRepository.findOne(new Long(movieID));
         m.addActor(actorRepository.findOne(new Long(actorID)));
         movieRepository.save(m);
